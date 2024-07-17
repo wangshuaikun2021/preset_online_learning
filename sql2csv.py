@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import pymysql
 from tqdm import tqdm
-from logger_config import logger
+from logger_config import setup_logger
 
 import warnings
 
@@ -24,6 +24,8 @@ def presetNormalize(df):
     :param df:
     :return:
     """
+    logger = setup_logger()
+
     cols = ['SY_PTM_STD1_WR_BendRoll_SV',
             'SY_PTM_STD1_IMR_BendRoll_SV',
             'SY_PTM_STD1_IMR_BendRoll_ACT',
@@ -135,6 +137,8 @@ def sqlToCsv(steel,high_table, ptm_table, save_path='csv', host='localhost', por
     :param save_path: 储存路径，不包含文件名
     :return:
     """
+    logger = setup_logger()
+
     if not high_table or not ptm_table:
         return None
     conn = pymysql.connect(

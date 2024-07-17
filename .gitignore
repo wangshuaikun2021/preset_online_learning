@@ -5,3 +5,5 @@ dist/
 logs/
 venv/
 *.epj
+__pycache__/
+*.pyc

@@ -14,10 +14,11 @@ from loguru import logger
 from get_preset_class import GeneratePreset
 # from tqdm import tqdm
 from updata_preset_table import get_start
-from logger_config import logger
+from logger_config import setup_logger
 
 
 def multi_func(row, host, port, user, passwd, db):
+    logger = setup_logger()
     last_id, hotId, coldId, high_table, ptm_table = row
     # print(last_id, hotId, coldId, high_table, ptm_table)
     logger.info(f"Processing {hotId}")
@@ -101,6 +102,8 @@ def read_db(last_id, save_path, size=12, host='localhost', port=3306, user='root
     :param db: 数据库名称
     :return: 最新的最后一个ID
     """
+    logger = setup_logger()
+
     conn = pymysql.connect(
         host=host,
         port=port,
@@ -307,6 +310,8 @@ if __name__ == '__main__':
     #            rotation="100 MB",  # 每当日志文件达到 100 MB 时，新建一个日志文件
     #            retention=100,  # 保留最多 100 个日志文件
     #            compression="zip")  # 压缩旧的日志文件为zip
+    logger = setup_logger()
+
     logger.info("Starting the program.")
     # save_path_start = os.path.dirname(__file__) + r'\初值表保存'
     save_path_start = r'初值表保存'

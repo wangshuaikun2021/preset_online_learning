@@ -4,7 +4,7 @@ import numpy as np
 import pymysql
 
 from sql2csv import sqlToCsv
-from logger_config import logger
+from logger_config import setup_logger
 
 
 
@@ -68,6 +68,8 @@ def ST_NO(steel, host='localhost',
     get 出钢标记
     :return:
     """
+    logger = setup_logger()
+
     conn = pymysql.connect(
         host=host,
         port=port,
@@ -91,7 +93,7 @@ def ST_NO(steel, host='localhost',
     C40s = C40_1 if len(C40_1) > 0 else C40_2
     if len(cgbjs) == 0:
         # print('未找到出钢标记')
-        logger.warning(f"未找到出钢标记{steel}")
+        logger.warning(f"未找到出钢标记 {steel}")
         return None, None
     elif len(C40s) == 0:
         # print('未找到C40')
@@ -175,6 +177,8 @@ def dropHead(length):
 
 
 def get_start(steel, high_table, ptm_table, host, port, user, passwd, db):
+    logger = setup_logger()
+
     cols_all, col_ctrl, col_policy = getCols()  # all, 设定值, 策略号的特征
     # steel = 'H123116309800'
     row = [steel]  # 值
@@ -183,7 +187,7 @@ def get_start(steel, high_table, ptm_table, host, port, user, passwd, db):
                   save=False)  # sql2csv
     if df is None:
         # print("设定值有问题")
-        logger.warning(f"设定值有问题{steel}")
+        logger.warning(f"设定值有问题 {steel}")
         return None
     if df.shape[0] > 100:
         length = df['SYEN_PTM_F5_Strip_Length']
@@ -212,11 +216,11 @@ def get_start(steel, high_table, ptm_table, host, port, user, passwd, db):
                         feature_name.append('policyNo')
                     else:
                         # print(f"策略号为空")
-                        logger.warning(f"策略号为空{steel}")
+                        logger.warning(f"策略号为空 {steel}")
                         return None
                 else:
                     # print(f"出钢标记{cgbj}不存在")
-                    logger.warning(f"出钢标记{cgbj}不存在")
+                    logger.warning(f"出钢标记{cgbj}不存在 {steel}")
                     return None
 
             controls = df[col_ctrl].values[0]
@@ -244,11 +248,11 @@ def get_start(steel, high_table, ptm_table, host, port, user, passwd, db):
 
         else:
             # print("带钢长度过短")
-            logger.warning(f"带钢长度过短{steel}")
+            logger.warning(f"带钢长度过短 {steel}")
             return None
     else:
         # print(f"带钢样本点过少：{df.shape[0]}")
-        logger.warning(f"带钢样本点过少：{df.shape[0]}")
+        logger.warning(f"带钢{steel}样本点过少：{df.shape[0]}")
         return None
 
 
