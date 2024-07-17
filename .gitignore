@@ -1,0 +1,7 @@
+.idea/
+.eric6project/
+build/
+dist/
+logs/
+venv/
+*.epj
