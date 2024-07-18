@@ -112,21 +112,21 @@ def getCols():
     col_policy: 宽度和两个厚度
     :return: cols_all, col_preset, col_policy
     """
-    col_preset = ['SY_PTM_STD1_WR_BendRoll_SV',
-                  'SY_PTM_STD2_WR_BendRoll_SV',
-                  'SY_PTM_STD3_WR_BendRoll_SV',
-                  'SY_PTM_STD4_WR_BendRoll_SV',
-                  'SY_PTM_STD5_WR_BendRoll_SV',
-                  'SY_PTM_STD1_IMR_BendRoll_SV',
-                  'SY_PTM_STD2_IMR_BendRoll_SV',
-                  'SY_PTM_STD3_IMR_BendRoll_SV',
-                  'SY_PTM_STD4_IMR_BendRoll_SV',
-                  'SY_PTM_STD5_IMR_BendRoll_SV',
-                  'SY_PTM_STD1_IMR_TopRollShift_SV',
-                  'SY_PTM_STD2_IMR_TopRollShift_SV',
-                  'SY_PTM_STD3_IMR_TopRollShift_SV',
-                  'SY_PTM_STD4_IMR_TopRollShift_SV',
-                  'SY_PTM_STD5_IMR_TopRollShift_SV']  # 设定值
+    col_preset = ['SY_PTM_STD1_WR_BendRoll_ACT',
+                  'SY_PTM_STD2_WR_BendRoll_ACT',
+                  'SY_PTM_STD3_WR_BendRoll_ACT',
+                  'SY_PTM_STD4_WR_BendRoll_ACT',
+                  'SY_PTM_STD5_WR_BendRoll_ACT',
+                  'SY_PTM_STD1_IMR_BendRoll_ACT',
+                  'SY_PTM_STD2_IMR_BendRoll_ACT',
+                  'SY_PTM_STD3_IMR_BendRoll_ACT',
+                  'SY_PTM_STD4_IMR_BendRoll_ACT',
+                  'SY_PTM_STD5_IMR_BendRoll_ACT',
+                  'SY_PTM_STD1_IMR_TopRollShift_ACT',
+                  'SY_PTM_STD2_IMR_TopRollShift_ACT',
+                  'SY_PTM_STD3_IMR_TopRollShift_ACT',
+                  'SY_PTM_STD4_IMR_TopRollShift_ACT',
+                  'SY_PTM_STD5_IMR_TopRollShift_ACT']  # 设定值
     col_policy = ['SY_PTM_ExitWidth', 'SY_PTM_STD1_EnThickness_ACT', 'SY_PTM_STD5_ExitThickness_ACT']
     col_others = ['SYEN_PTM_F5_Flatness_Error', 'SYEN_PTM_F5_Strip_Length',
                   'SY_PTM_STD1_RollForce_ACT', 'SY_PTM_STD2_RollForce_ACT', 'SY_PTM_STD3_RollForce_ACT',
@@ -223,7 +223,8 @@ def get_start(steel, high_table, ptm_table, host, port, user, passwd, db):
                     logger.warning(f"出钢标记{cgbj}不存在 {steel}")
                     return None
 
-            controls = df[col_ctrl].values[0]
+            # controls = df[col_ctrl].values[0]
+            controls = df[col_ctrl].values.mean(axis=0)   # 全长均值
             row.extend(controls)
             col_ctrl_another = ['WRB1', 'WRB2', 'WRB3', 'WRB4', 'WRB5',
                                 'IRB1', 'IRB2', 'IRB3', 'IRB4', 'IRB5',

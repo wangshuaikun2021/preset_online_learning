@@ -27,18 +27,23 @@ def presetNormalize(df):
     logger = setup_logger()
 
     cols = ['SY_PTM_STD1_WR_BendRoll_SV',
+            'SY_PTM_STD1_WR_BendRoll_ACT',
             'SY_PTM_STD1_IMR_BendRoll_SV',
             'SY_PTM_STD1_IMR_BendRoll_ACT',
             'SY_PTM_STD2_WR_BendRoll_SV',
+            'SY_PTM_STD2_WR_BendRoll_ACT',
             'SY_PTM_STD2_IMR_BendRoll_SV',
             'SY_PTM_STD2_IMR_BendRoll_ACT',
             'SY_PTM_STD3_WR_BendRoll_SV',
+            'SY_PTM_STD3_WR_BendRoll_ACT',
             'SY_PTM_STD3_IMR_BendRoll_SV',
             'SY_PTM_STD3_IMR_BendRoll_ACT',
             'SY_PTM_STD4_WR_BendRoll_SV',
+            'SY_PTM_STD4_WR_BendRoll_ACT',
             'SY_PTM_STD4_IMR_BendRoll_SV',
             'SY_PTM_STD4_IMR_BendRoll_ACT',
             'SY_PTM_STD5_WR_BendRoll_SV',
+            'SY_PTM_STD5_WR_BendRoll_ACT',
             'SY_PTM_STD5_IMR_BendRoll_SV',
             'SY_PTM_STD5_IMR_BendRoll_ACT',
             'SY_PTM_STD1_IMR_TopRollShift_SV',
@@ -98,7 +103,10 @@ def concat_high_ptm(df_ptm, df_high):
     :param df_high:
     :return:
     """
-    col_sql = pd.read_excel(f'SQL与PDA变量名对应.xlsx').dropna()['SQL']  # SQL与PDA变量名对应
+    # col_sql = pd.read_excel(f'SQL与PDA变量名对应.xlsx').dropna()['SQL']  # SQL与PDA变量名对应
+    col_sql = ['SY_PTM_ExitWidth', 'SYEN_PTM_F5_Strip_Length', 'SYEN_PTM_F5_Flatness_Error', 'SYEN_PTM_F5_Release_Tilt_Control', 'SYEN_PTM_F5_Tilt_Control_Active', 'SYEN_PTM_F5_Release_WR_Bend_Control', 'SYEN_PTM_F5_WR_Bend_Control_Active', 'SYEN_PTM_F5_Release_IR_Bend_Control', 'SYEN_PTM_F5_IR_Bend_Control_Active', 'SYEN_PTM_F5_Release_IR_Shift_Control', 'SYEN_PTM_F5_IR_Shift_Control_Active', 'SYEN_PTM_F5_IR_Bend_Control_Active_MONI', 'SYEN_PTM_F5_IR_Shift_Control_Active_MONI', 'SYEN_PTM_F5_Flatness_Error_Tilt', 'SYEN_PTM_F5_Flatness_Error_WR_Bend', 'SYEN_PTM_F5_Flatness_Error_IR_Bend', 'SYEN_PTM_F5_Flatness_Error_IR_Shift', 'SYEN_PTM_F5_Add_Tilt', 'SYEN_PTM_F5_Add_WR_Bend', 'SYEN_PTM_F5_Add_IR_Bend', 'SYEN_PTM_F5_Add_IR_Shift', 'SY_PTM_STD1_EnThickness_SV', 'SY_PTM_STD1_EnThickness_ACT', 'SY_PTM_STD1_ExitThickness_ACT', 'SY_PTM_STD5_ExitThickness_SV', 'SY_PTM_STD5_ExitThickness_ACT', 'SY_PTM_STD1_ForwardSlip_ACT', 'SY_PTM_STD2_ForwardSlip_ACT', 'SY_PTM_STD3_ForwardSlip_ACT', 'SY_PTM_STD4_ForwardSlip_ACT', 'SY_PTM_STD5_ForwardSlip_ACT', 'SY_PTM_STD1_ForwardSlip_SV', 'SY_PTM_STD2_ForwardSlip_SV', 'SY_PTM_STD3_ForwardSlip_SV', 'SY_PTM_STD4_ForwardSlip_SV', 'SY_PTM_STD5_ForwardSlip_SV', 'SYEN_PTM_SLC_ACT_Speed_Bridle52', 'SYEN_PTM_SLC_Laser_Speed_Behind_S1', 'SYEN_PTM_SLC_Laser_Speed_Behind_S4', 'SYEN_PTM_SLC_Laser_Speed_Behind_S5', 'SYEN_PTM_SLC_ACT_Speed_Exit_Roll', 'SY_PTM_STD1_RollSpeed_ACT', 'SY_PTM_STD2_RollSpeed_ACT', 'SY_PTM_STD3_RollSpeed_ACT', 'SY_PTM_STD4_RollSpeed_ACT', 'SY_PTM_STD5_RollSpeed_ACT', 'SYEN_PTM_SLC_Strip_Speed_S1_S2', 'SYEN_PTM_SLC_Strip_Speed_S2_S3', 'SYEN_PTM_SLC_Strip_Speed_S3_S4', 'SYEN_PTM_SLC_Strip_Speed_S4_S5', 'SYEN_PTM_SLC_Strip_Speed_Afer_S5', 'SYEN_PTM_N1_ITC_Tension_ACT_DS', 'SYEN_PTM_N1_ITC_Tension_ACT_OS', 'SYEN_PTM_N2_ITC_Tension_ACT_DS', 'SYEN_PTM_N2_ITC_Tension_ACT_OS', 'SYEN_PTM_N3_ITC_Tension_ACT_DS', 'SYEN_PTM_N3_ITC_Tension_ACT_OS', 'SYEN_PTM_N4_ITC_Tension_ACT_DS', 'SYEN_PTM_N4_ITC_Tension_ACT_OS', 'SYEN_PTM_N5_ITC_Tension_ACT_DS', 'SYEN_PTM_N5_ITC_Tension_ACT_OS', 'SYEN_PTM_N5_Tension_ACT_DS_S5', 'SYEN_PTM_N5_Tension_ACT_OS_S5', 'SYEN_PTM_F5_ACT_S5_Smoothed', 'SY_PTM_STD1_RollGap_ACT', 'SY_PTM_STD1_RollForce_ACT', 'SY_PTM_STD1_TiltDStoOS_ACT', 'SY_PTM_STD2_RollGap_ACT', 'SY_PTM_STD2_RollForce_ACT', 'SY_PTM_STD2_TiltDStoOS_ACT', 'SY_PTM_STD3_RollGap_ACT', 'SY_PTM_STD3_RollForce_ACT', 'SY_PTM_STD3_TiltDStoOS_ACT', 'SY_PTM_STD4_RollGap_ACT', 'SY_PTM_STD4_RollForce_ACT', 'SY_PTM_STD4_TiltDStoOS_ACT', 'SY_PTM_STD5_RollGap_ACT', 'SY_PTM_STD5_RollForce_ACT', 'SY_PTM_STD5_TiltDStoOS_ACT', 'SY_PTM_STD1_WR_BendRoll_SV', 'SY_PTM_STD1_IMR_BendRoll_SV', 'SY_PTM_STD1_IMR_BendRoll_ACT', 'SY_PTM_STD2_WR_BendRoll_SV', 'SY_PTM_STD2_IMR_BendRoll_SV', 'SY_PTM_STD2_IMR_BendRoll_ACT', 'SY_PTM_STD3_WR_BendRoll_SV', 'SY_PTM_STD3_IMR_BendRoll_SV', 'SY_PTM_STD3_IMR_BendRoll_ACT', 'SY_PTM_STD4_WR_BendRoll_SV', 'SY_PTM_STD4_IMR_BendRoll_SV', 'SY_PTM_STD4_IMR_BendRoll_ACT', 'SY_PTM_STD5_WR_BendRoll_SV', 'SY_PTM_STD5_IMR_BendRoll_SV', 'SY_PTM_STD5_IMR_BendRoll_ACT', 'SY_PTM_STD1_IMR_TopRollShift_SV', 'SY_PTM_STD1_IMR_TopRollShift_ACT', 'SY_PTM_STD1_IMR_BotRollShift_ACT', 'SY_PTM_STD2_IMR_TopRollShift_SV', 'SY_PTM_STD2_IMR_TopRollShift_ACT', 'SY_PTM_STD2_IMR_BotRollShift_ACT', 'SY_PTM_STD3_IMR_TopRollShift_SV', 'SY_PTM_STD3_IMR_TopRollShift_ACT', 'SY_PTM_STD3_IMR_BotRollShift_ACT', 'SY_PTM_STD4_IMR_TopRollShift_SV', 'SY_PTM_STD4_IMR_TopRollShift_ACT', 'SY_PTM_STD4_IMR_BotRollShift_ACT', 'SY_PTM_STD5_IMR_TopRollShift_SV', 'SY_PTM_STD5_IMR_TopRollShift_ACT', 'SY_PTM_STD5_IMR_BotRollShift_ACT', 'SY_PTM_STD1_ScrewDw_Ratio', 'SY_PTM_STD2_ScrewDw_Ratio', 'SY_PTM_STD3_ScrewDw_Ratio', 'SY_PTM_STD4_ScrewDw_Ratio', 'SY_PTM_STD5_ScrewDw_Ratio', 'SYEN_PTM_ROLCH111_PTMRoll23_DB1016_REAL84', 'SYEN_PTM_ROLCH112_PTMRoll24_DB1016_REAL84', 'SYEN_PTM_ROLCH113_PTMRoll25_DB1016_REAL84', 'SYEN_PTM_ROLCH114_PTMRoll26_DB1016_REAL84', 'SYEN_PTM_ROLCH115_PTMRoll27_DB1016_REAL84', 'SY_PTM_STD1_WR_BendRoll_ACT', 'SY_PTM_STD2_WR_BendRoll_ACT',
+    'SY_PTM_STD3_WR_BendRoll_ACT', 'SY_PTM_STD4_WR_BendRoll_ACT', 'SY_PTM_STD5_WR_BendRoll_ACT']
+    col_sql = pd.Series(col_sql)
     ptmC = df_ptm.columns
     highC = df_high.columns
     # columns_ptm = []  # ptm变量

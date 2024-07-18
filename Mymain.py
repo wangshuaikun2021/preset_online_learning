@@ -27,7 +27,7 @@ def multi_func(row, host, port, user, passwd, db):
     if start_value:
         # print(start_value)
         start_df = start_value
-        fea_cols = start_value[1]
+        # fea_cols = start_value[1]
         return start_df
 
 
@@ -301,7 +301,8 @@ def mainFunc(last_id, savepath, savepath_tabel, size, update_t, host, port, user
 
     while True:
         schedule.run_pending()
-        run_read_task()
+        # run_read_task()
+        # run_generate_task()
         time.sleep(1)
 
 
