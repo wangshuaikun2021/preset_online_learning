@@ -1,6 +1,7 @@
 import functools
 import multiprocessing
 import os
+import shutil
 import threading
 import time
 
@@ -103,7 +104,7 @@ def read_db(last_id, save_path, size=12, host='localhost', port=3306, user='root
     :return: 最新的最后一个ID
     """
     logger = setup_logger()
-
+    trans_bbph_gd()
     conn = pymysql.connect(
         host=host,
         port=port,
@@ -154,6 +155,22 @@ def read_db(last_id, save_path, size=12, host='localhost', port=3306, user='root
         logger.info(f"Data saved to {save_path}/{last_id}.csv")
     return last_id
 
+def trans_bbph_gd():
+    if os.path.getmtime("APSREF_AI.xlsx") < os.path.getmtime("bpph2gd.npy") and os.path.getmtime("二级钢种表.xlsx") < os.path.getmtime("cgbj2bpph.npy"):
+        return
+    logger = setup_logger()
+    logger.info("Transforming the data from APSREF_AI.xlsx or 二级钢种表.xlsx")
+
+    bpph2gd = pd.read_excel("APSREF_AI.xlsx")[["ALLOYCODE", "APSKEY"]]
+    cgbj2bpph = pd.read_excel("二级钢种表.xlsx")[["出钢标记", "板坯牌号"]]
+    # 转成dict
+    bpph2gd_dict = dict(zip(bpph2gd["ALLOYCODE"], bpph2gd["APSKEY"]))
+    cgbj2bpph_dict = dict(zip(cgbj2bpph["出钢标记"], cgbj2bpph["板坯牌号"]))
+    # save
+    np.save("bpph2gd.npy", bpph2gd_dict)
+    np.save("cgbj2bpph.npy", cgbj2bpph_dict)
+
+
 
 def generate_table(startValPath, savepath_tabel, num_limit):
     # 获取文件夹下的所有文件
@@ -167,11 +184,11 @@ def generate_table(startValPath, savepath_tabel, num_limit):
     files = [file for _, file in sorted(zip(file_times, files))]
     name = files[-1].split('.')[0]
     df = []
-    need_cols = ['steel', 'policyNo', 'iu50_mean',
-                 'WRB1', 'WRB2', 'WRB3', 'WRB4', 'WRB5',
-                 'IRB1', 'IRB2', 'IRB3', 'IRB4', 'IRB5',
-                 'IRS1', 'IRS2', 'IRS3', 'IRS4', 'IRS5',
-                 'alloyCode']
+    need_cols = ['steel', 'aDirNoAi', 'IU_50',
+                     'WRB_1', 'WRB_2', 'WRB_3', 'WRB_4', 'WRB_5',
+                     'IRB_1', 'IRB_2', 'IRB_3', 'IRB_4', 'IRB_5',
+                     'IRS_1', 'IRS_2', 'IRS_3', 'IRS_4', 'IRS_5',
+                     'alloyCode']
 
     def is_in(sublist, mainlist):
         return all(item in mainlist for item in sublist)
@@ -202,7 +219,12 @@ def generate_table(startValPath, savepath_tabel, num_limit):
     gp.data_model()
     gp.condat_ans()
     # gp.preset_df_data.to_csv(r'预设定表格\设定表格更新1016.csv', index=False)
+    # 把原文件移到预设定表格保存文件夹
+    # cur_time = time.localtime()
+    # cur_time = time.strftime("%Y%m%d%H%M%S", cur_time)
     gp.preset_excel.to_excel(fr'{savepath_tabel}\STDADIRPASS_AI.xlsx', index=False)
+    # 复制文件
+    shutil.copyfile(fr'{savepath_tabel}\STDADIRPASS_AI.xlsx', fr'STDADIRPASS_AI.xlsx')
 
 
 # def mainFunc(last_id, savepath, savepath_tabel, size, update_t, host, port, user, passwd, db, num_limit):
@@ -301,8 +323,8 @@ def mainFunc(last_id, savepath, savepath_tabel, size, update_t, host, port, user
 
     while True:
         schedule.run_pending()
-        # run_read_task()
-        # run_generate_task()
+        run_read_task()
+        run_generate_task()
         time.sleep(1)
 
 
@@ -327,7 +349,7 @@ if __name__ == '__main__':
     files = [file for _, file in sorted(zip(file_times, files))]
     name = files[-1].split('.')[0]
     last_id = int(name)
-    last_id = 338200
+    last_id = 338500
     save_path_preset = r'预设定表格保存'
     # save_path_preset = os.path.dirname(__file__) + r'\预设定表格保存'
     # print(save_path_preset)

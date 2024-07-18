@@ -112,7 +112,7 @@ class GeneratePreset:
 
         pre_df = []
 
-        for p in tqdm(policy):
+        for p in policy:
             df_p = self.df[self.df['aDirNoAi'] == p]
             iu_3_left = df_p[df_p["IU_50"] <= 3]
             iu_3_right = df_p[df_p["IU_50"] > 3]
